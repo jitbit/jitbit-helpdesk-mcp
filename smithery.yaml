@@ -1,0 +1,25 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - jitbitUrl
+      - jitbitToken
+    properties:
+      jitbitUrl:
+        type: string
+        title: Jitbit Helpdesk URL
+        description: Base URL of your Jitbit Helpdesk instance (e.g. https://yourcompany.jitbit.com)
+      jitbitToken:
+        type: string
+        title: JWT Token
+        description: JWT token from your Jitbit profile page
+  commandFunction: |-
+    (config) => ({
+      command: 'npx',
+      args: ['-y', 'jitbit-helpdesk-mcp'],
+      env: {
+        JITBIT_URL: config.jitbitUrl,
+        JITBIT_TOKEN: config.jitbitToken
+      }
+    })
