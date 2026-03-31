@@ -4,15 +4,23 @@ An MCP (Model Context Protocol) server that lets AI assistants search and read s
 
 [![npm version](https://img.shields.io/npm/v/jitbit-helpdesk-mcp.svg)](https://www.npmjs.com/package/jitbit-helpdesk-mcp)
 
-## Quick Start
+## Setup
+
+### Claude Code
 
 ```bash
-npx -y jitbit-helpdesk-mcp
+claude mcp add jitbit-helpdesk \
+  -e JITBIT_URL=https://yourcompany.jitbit.com \
+  -e JITBIT_TOKEN=your-api-token \
+  -- npx -y jitbit-helpdesk-mcp
 ```
 
-## Configuration
+### Claude Desktop, Cursor, Windsurf
 
-Add to your MCP client config (Claude Desktop, Cursor, Windsurf, etc.):
+Add to your config file:
+- Claude Desktop: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
+- Cursor: Settings > MCP Servers
+- Windsurf: Settings > MCP Servers
 
 ```json
 {
@@ -22,7 +30,7 @@ Add to your MCP client config (Claude Desktop, Cursor, Windsurf, etc.):
       "args": ["-y", "jitbit-helpdesk-mcp"],
       "env": {
         "JITBIT_URL": "https://yourcompany.jitbit.com",
-        "JITBIT_TOKEN": "your-jwt-token"
+        "JITBIT_TOKEN": "your-api-token"
       }
     }
   }
