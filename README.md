@@ -34,7 +34,14 @@ Add to your MCP client config (Claude Desktop, Cursor, Windsurf, etc.):
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `JITBIT_URL` | Yes | Base URL of your Jitbit instance (SaaS: `https://yourcompany.jitbit.com`, on-prem: your server URL) |
-| `JITBIT_TOKEN` | Yes | JWT token — copy from your Jitbit profile page |
+| `JITBIT_TOKEN` | Yes | API token — see below |
+
+### Getting your API token
+
+1. Log in to your Jitbit Helpdesk
+2. Go to your **User Profile** (click your avatar in the top right)
+3. Click the **"API Token"** button
+4. Copy the token and use it as the `JITBIT_TOKEN` value
 
 ## Tools
 
