@@ -1,6 +1,7 @@
 {
   "name": "jitbit-helpdesk-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "mcpName": "io.github.jitbit/jitbit-helpdesk",
   "description": "MCP server for Jitbit Helpdesk — search and read support tickets from AI assistants",
   "type": "module",
   "main": "dist/index.js",

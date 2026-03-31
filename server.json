@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.jitbit/jitbit-helpdesk",
+  "description": "MCP server for Jitbit Helpdesk — search and read support tickets from AI assistants",
+  "repository": {
+    "url": "https://github.com/jitbit/jitbit-helpdesk-mcp",
+    "source": "github"
+  },
+  "version": "1.0.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "jitbit-helpdesk-mcp",
+      "version": "1.0.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "description": "Base URL of your Jitbit Helpdesk instance",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": false,
+          "name": "JITBIT_URL"
+        },
+        {
+          "description": "JWT API token from your Jitbit profile",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": true,
+          "name": "JITBIT_TOKEN"
+        }
+      ]
+    }
+  ]
+}
