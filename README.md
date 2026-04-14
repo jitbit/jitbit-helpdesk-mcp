@@ -6,7 +6,39 @@ An MCP (Model Context Protocol) server that lets AI assistants search and read s
 
 ## Setup
 
-### Claude Code
+Two options:
+
+1. **Hosted HTTP endpoint** (recommended) — built into Jitbit, no installation required. Available on SaaS and on-premise installs running version 11.21 or later. See the [Jitbit MCP docs](https://www.jitbit.com/docs/mcp/).
+2. **Local npm package** — this repo, runs locally via `npx`. Use this if your on-premise Jitbit is older than 11.21.
+
+### Option 1: Hosted HTTP endpoint
+
+#### Claude Code
+
+```bash
+claude mcp add --transport http jitbit-helpdesk https://yourcompany.jitbit.com/api/mcp \
+  --header "Authorization: Bearer your-api-token"
+```
+
+#### Claude Desktop, Cursor, Windsurf
+
+```json
+{
+  "mcpServers": {
+    "jitbit-helpdesk": {
+      "type": "http",
+      "url": "https://yourcompany.jitbit.com/api/mcp",
+      "headers": {
+        "Authorization": "Bearer your-api-token"
+      }
+    }
+  }
+}
+```
+
+### Option 2: Local npm package
+
+#### Claude Code
 
 ```bash
 claude mcp add jitbit-helpdesk \
@@ -15,7 +47,7 @@ claude mcp add jitbit-helpdesk \
   -- npx -y jitbit-helpdesk-mcp
 ```
 
-### Claude Desktop, Cursor, Windsurf
+#### Claude Desktop, Cursor, Windsurf
 
 Add to your config file:
 - Claude Desktop: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
