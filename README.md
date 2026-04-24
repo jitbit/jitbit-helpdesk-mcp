@@ -4,12 +4,14 @@ An MCP (Model Context Protocol) server that lets AI assistants search and read s
 
 [![npm version](https://img.shields.io/npm/v/jitbit-helpdesk-mcp.svg)](https://www.npmjs.com/package/jitbit-helpdesk-mcp)
 
+> ⚠️ **Deprecation notice:** Jitbit now ships a built-in HTTP MCP endpoint at `/api/mcp` on all SaaS and on-premise installs running version 11.21 or later. That is the preferred way to connect AI assistants to Jitbit — it has more tools, stays in sync with Jitbit releases automatically, and requires no local install. **This npm package will be deprecated soon** and is only recommended for on-premise installs older than 11.21. See the [Jitbit MCP docs](https://www.jitbit.com/docs/mcp/).
+
 ## Setup
 
 Two options:
 
 1. **Hosted HTTP endpoint** (recommended) — built into Jitbit, no installation required. Available on SaaS and on-premise installs running version 11.21 or later. See the [Jitbit MCP docs](https://www.jitbit.com/docs/mcp/).
-2. **Local npm package** — this repo, runs locally via `npx`. Use this if your on-premise Jitbit is older than 11.21.
+2. **Local npm package** (deprecated) — this repo, runs locally via `npx`. Use this only if your on-premise Jitbit is older than 11.21.
 
 ### Option 1: Hosted HTTP endpoint
 
