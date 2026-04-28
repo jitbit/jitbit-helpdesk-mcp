@@ -3,7 +3,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { JitbitClient } from "./jitbit-client.js";
+import { JitbitClient, JitbitUserInfo, TicketSummary } from "./jitbit-client.js";
 
 const JITBIT_URL = process.env.JITBIT_URL;
 const JITBIT_TOKEN = process.env.JITBIT_TOKEN;
@@ -25,13 +25,23 @@ const server = new McpServer({
   version: "1.0.0",
 });
 
-function formatTicketSummary(ticket: { IssueID: number; Subject: string; Status: string; Priority: string; CategoryName: string; SubmitterUserName: string; AssigneeUserName: string; DateCreated: string; DateUpdated: string }): string {
+function formatSubmitterFromList(t: TicketSummary): string {
+  const composed = `${t.FirstName ?? ""} ${t.LastName ?? ""}`.trim();
+  return composed || t.UserName || "Unknown";
+}
+
+function formatUserInfo(info: JitbitUserInfo | null | undefined): string {
+  if (!info) return "Unknown";
+  return info.FullName?.trim() || info.Username || `User ${info.UserID}`;
+}
+
+function formatTicketSummary(ticket: TicketSummary): string {
   return [
     `#${ticket.IssueID}: ${ticket.Subject}`,
     `  Status: ${ticket.Status} | Priority: ${ticket.Priority}`,
-    `  Category: ${ticket.CategoryName}`,
-    `  From: ${ticket.SubmitterUserName} | Assigned: ${ticket.AssigneeUserName || "Unassigned"}`,
-    `  Created: ${ticket.DateCreated} | Updated: ${ticket.DateUpdated}`,
+    `  Category: ${ticket.Category}`,
+    `  From: ${formatSubmitterFromList(ticket)} | Assigned: ${ticket.Technician || "Unassigned"}`,
+    `  Created: ${ticket.IssueDate} | Updated: ${ticket.LastUpdated}`,
   ].join("\n");
 }
 
@@ -149,17 +159,19 @@ Returns: Full ticket details including subject, body, status, priority, category
     try {
       const ticket = await client.getTicket(ticketId);
 
+      const assignee = ticket.AssignedToUserID ? formatUserInfo(ticket.AssigneeUserInfo) : "Unassigned";
+
       const lines = [
-        `# Ticket #${ticket.IssueID}: ${ticket.Subject}`,
+        `# Ticket #${ticket.TicketID}: ${ticket.Subject}`,
         "",
         `**Status:** ${ticket.Status} | **Priority:** ${ticket.Priority}`,
         `**Category:** ${ticket.CategoryName}`,
-        `**From:** ${ticket.SubmitterUserName} | **Assigned:** ${ticket.AssigneeUserName || "Unassigned"}`,
-        `**Created:** ${ticket.DateCreated} | **Updated:** ${ticket.DateUpdated}`,
+        `**From:** ${formatUserInfo(ticket.SubmitterUserInfo)} | **Assigned:** ${assignee}`,
+        `**Created:** ${ticket.IssueDate} | **Updated:** ${ticket.LastUpdated}`,
       ];
 
       if (ticket.Tags?.length) {
-        lines.push(`**Tags:** ${ticket.Tags.join(", ")}`);
+        lines.push(`**Tags:** ${ticket.Tags.map((t) => t.Name).join(", ")}`);
       }
 
       lines.push("", "## Description", "", ticket.Body || "(empty)");
@@ -167,8 +179,10 @@ Returns: Full ticket details including subject, body, status, priority, category
       if (ticket.Comments?.length) {
         lines.push("", "## Conversation", "");
         for (const comment of ticket.Comments) {
-          if (comment.IsHidden) continue;
-          lines.push(`### ${comment.UserName} — ${comment.DateCreated}`, "", comment.Body, "");
+          const heading = comment.ForTechsOnly
+            ? `### ${comment.UserName} — ${comment.CommentDate} (internal note)`
+            : `### ${comment.UserName} — ${comment.CommentDate}`;
+          lines.push(heading, "", comment.Body, "");
         }
       }
 

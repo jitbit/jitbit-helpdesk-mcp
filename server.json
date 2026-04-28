@@ -6,12 +6,12 @@
     "url": "https://github.com/jitbit/jitbit-helpdesk-mcp",
     "source": "github"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "jitbit-helpdesk-mcp",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "transport": {
         "type": "stdio"
       },

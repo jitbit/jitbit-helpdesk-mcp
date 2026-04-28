@@ -1,6 +1,6 @@
 {
   "name": "jitbit-helpdesk-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "mcpName": "io.github.jitbit/jitbit-helpdesk",
   "description": "MCP server for Jitbit Helpdesk — search and read support tickets from AI assistants",
   "type": "module",
@@ -8,6 +8,12 @@
   "bin": {
     "jitbit-helpdesk-mcp": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "smithery.yaml",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",

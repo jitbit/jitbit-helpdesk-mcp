@@ -2,34 +2,52 @@ export interface TicketSummary {
   IssueID: number;
   Subject: string;
   Status: string;
-  Priority: string;
-  CategoryName: string;
-  SubmitterUserName: string;
-  AssigneeUserName: string;
-  DateCreated: string;
-  DateUpdated: string;
+  Priority: number;
+  Category: string;
+  UserName: string;
+  FirstName: string;
+  LastName: string;
+  Technician: string;
+  IssueDate: string;
+  LastUpdated: string;
+}
+
+export interface JitbitUserInfo {
+  UserID: number;
+  Username: string;
+  FullName: string;
+  FirstName: string;
+  LastName: string;
+  Email: string;
+}
+
+export interface TicketTag {
+  TagID: number;
+  Name: string;
+  TagCount: number;
 }
 
 export interface TicketComment {
   CommentID: number;
   Body: string;
   UserName: string;
-  DateCreated: string;
-  IsHidden: boolean;
+  CommentDate: string;
+  ForTechsOnly: boolean;
 }
 
 export interface TicketDetails {
-  IssueID: number;
+  TicketID: number;
   Subject: string;
   Body: string;
   Status: string;
-  Priority: string;
+  Priority: number;
   CategoryName: string;
-  SubmitterUserName: string;
-  AssigneeUserName: string;
-  DateCreated: string;
-  DateUpdated: string;
-  Tags: string[];
+  SubmitterUserInfo: JitbitUserInfo;
+  AssigneeUserInfo: JitbitUserInfo | null;
+  AssignedToUserID: number | null;
+  IssueDate: string;
+  LastUpdated: string;
+  Tags: TicketTag[];
   Comments: TicketComment[];
 }
 
@@ -97,6 +115,10 @@ export class JitbitClient {
   }
 
   async getTicket(ticketId: number): Promise<TicketDetails> {
-    return this.request<TicketDetails>("/Ticket", { id: ticketId });
+    const [ticket, comments] = await Promise.all([
+      this.request<Omit<TicketDetails, "Comments">>("/Ticket", { id: ticketId }),
+      this.request<TicketComment[]>("/Comments", { id: ticketId }),
+    ]);
+    return { ...ticket, Comments: comments };
   }
 }
