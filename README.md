@@ -4,14 +4,14 @@ An MCP (Model Context Protocol) server that lets AI assistants search and read s
 
 [![npm version](https://img.shields.io/npm/v/jitbit-helpdesk-mcp.svg)](https://www.npmjs.com/package/jitbit-helpdesk-mcp)
 
-> ⚠️ **Deprecation notice:** Jitbit now ships a built-in HTTP MCP endpoint at `/api/mcp` on all SaaS and on-premise installs running version 11.21 or later. That is the preferred way to connect AI assistants to Jitbit — it has more tools, stays in sync with Jitbit releases automatically, and requires no local install. **This npm package will be deprecated soon** and is only recommended for on-premise installs older than 11.21. See the [Jitbit MCP docs](https://www.jitbit.com/docs/mcp/).
+> ⚠️ **Use the hosted HTTP endpoint when possible.** Jitbit ships a built-in HTTP MCP endpoint at `/api/mcp` on all SaaS and on-premise installs running version 11.21 or later. That is the preferred way to connect AI assistants to Jitbit — no local install, always in sync with Jitbit releases. See the [Jitbit MCP docs](https://www.jitbit.com/docs/mcp/). Starting with **2.x, this npm package is a thin stdio proxy** to that same endpoint, for clients that don't yet support remote HTTP MCP servers. **Jitbit 11.21 or later is required.** If you're on an older on-premise version, stay on `jitbit-helpdesk-mcp@1.x`.
 
 ## Setup
 
 Two options:
 
-1. **Hosted HTTP endpoint** (recommended) — built into Jitbit, no installation required. Available on SaaS and on-premise installs running version 11.21 or later. See the [Jitbit MCP docs](https://www.jitbit.com/docs/mcp/).
-2. **Local npm package** (deprecated) — this repo, runs locally via `npx`. Use this only if your on-premise Jitbit is older than 11.21.
+1. **Hosted HTTP endpoint** (recommended) — connect your MCP client directly to Jitbit's `/api/mcp`. Use this whenever your client supports HTTP MCP transport.
+2. **Local npm package (stdio proxy)** — this repo. Use it when your MCP client only supports stdio transport. It forwards every request to `{JITBIT_URL}/api/mcp` and adds nothing of its own.
 
 ### Option 1: Hosted HTTP endpoint
 
@@ -38,7 +38,7 @@ claude mcp add --transport http jitbit-helpdesk https://yourcompany.jitbit.com/a
 }
 ```
 
-### Option 2: Local npm package
+### Option 2: Local npm package (stdio proxy)
 
 #### Claude Code
 
@@ -87,31 +87,7 @@ Add to your config file:
 
 ## Tools
 
-### `jitbit_search_tickets`
-
-Search tickets by keyword or phrase.
-
-**Parameters:**
-- `query` (string, required) — search query
-- `limit` (number, default 25) — max results (1–100)
-- `offset` (number, default 0) — pagination offset
-
-### `jitbit_list_tickets`
-
-List and filter tickets.
-
-**Parameters:**
-- `mode` (string, optional) — `"all"`, `"unanswered"`, or `"updated"`
-- `status` (string, optional) — filter by ticket status
-- `limit` (number, default 25) — max results (1–100)
-- `offset` (number, default 0) — pagination offset
-
-### `jitbit_get_ticket`
-
-Get a single ticket with its full conversation thread.
-
-**Parameters:**
-- `ticketId` (number, required) — the ticket ID
+The proxy exposes whatever tools the connected Jitbit instance advertises at `/api/mcp` — typically ticket search, list, and read, plus anything Jitbit adds in later releases. Use your MCP client's tool listing (or the [Jitbit MCP docs](https://www.jitbit.com/docs/mcp/)) for the up-to-date catalog.
 
 ## Development
 
